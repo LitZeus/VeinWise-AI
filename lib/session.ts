@@ -1,5 +1,5 @@
 // Session configuration for iron-session
-import { getIronSession, IronSessionOptions } from 'iron-session';
+import { getIronSession, SessionOptions } from 'iron-session';
 import { cookies } from 'next/headers';
 
 export interface SessionData {
@@ -11,7 +11,7 @@ export interface SessionData {
   expiresAt: number;
 }
 
-export const sessionOptions: IronSessionOptions = {
+export const sessionOptions: SessionOptions = {
   password: process.env.SESSION_SECRET || 'complex_password_at_least_32_characters_long',
   cookieName: 'veinwise_session',
   cookieOptions: {
