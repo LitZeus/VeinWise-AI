@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+//import { useEffect } from 'react';
 import dynamic from 'next/dynamic';
 
 // Dynamically import the MobileNavigation component with SSR disabled

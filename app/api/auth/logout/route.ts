@@ -4,7 +4,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // Ensure this route is not cached
 export const dynamic = 'force-dynamic';
 
-export async function POST(request: NextRequest) {
+export async function POST(_request: NextRequest) {
   try {
 
     // Destroy the session
