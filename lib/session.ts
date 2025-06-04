@@ -50,7 +50,7 @@ export async function createSession(userData: {
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
 
   const now = Date.now();
-  const expiresAt = now + sessionOptions.cookieOptions.maxAge * 1000;
+  const expiresAt = now + (sessionOptions.cookieOptions?.maxAge || 60 * 60 * 24 * 7) * 1000;
 
   session.userId = userData.id;
   session.email = userData.email;
@@ -78,7 +78,7 @@ export async function extendSession() {
 
   if (session.isLoggedIn) {
     const now = Date.now();
-    session.expiresAt = now + sessionOptions.cookieOptions.maxAge * 1000;
+    session.expiresAt = now + (sessionOptions.cookieOptions?.maxAge || 60 * 60 * 24 * 7) * 1000;
     await session.save();
   }
 
