@@ -24,17 +24,26 @@ interface Scan {
   created_at: string;
 }
 
-export default function PatientDetailPage({ params }: { params: { id: string } }) {
-  // Get the patient ID from params
-  const patientId = params.id;
-
+export default function PatientDetailPage({ params }: { params: Promise<{ id: string }> }) {
+  const [patientId, setPatientId] = useState<string | null>(null);
   const [patient, setPatient] = useState<Patient | null>(null);
   const [scans, setScans] = useState<Scan[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Extract patientId from params
+  useEffect(() => {
+    const getPatientId = async () => {
+      const resolvedParams = await params;
+      setPatientId(resolvedParams.id);
+    };
+    getPatientId();
+  }, [params]);
+
   useEffect(() => {
     const fetchPatientData = async () => {
+      if (!patientId) return;
+
       try {
         setIsLoading(true);
 
@@ -64,10 +73,8 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
       }
     };
 
-    if (patientId) {
-      fetchPatientData();
-    }
-  }, [patientId]); // Use unwrapped patientId instead of params.id
+    fetchPatientData();
+  }, [patientId]);
 
   if (isLoading) {
     return (
