@@ -7,13 +7,11 @@ const pool = new Pool({
 });
 
 // Helper function to execute SQL queries
-export async function query(text: string, params?: any[]) {
+export async function query(text: string, params?: unknown[]) {
   try {
-    const start = Date.now();
     const res = await pool.query(text, params);
-    const duration = Date.now() - start;
     return res;
-  } catch (error) {
+  } catch (error: unknown) {
     console.error('Error executing query', { text, error });
     throw error;
   }
@@ -29,11 +27,11 @@ export async function checkDatabaseConnection() {
     console.error('Database connection error:', error);
     return {
       connected: false,
-      error: 'Could not connect to the database. Please check your DATABASE_URL in .env.local'
+      error:
+        'Could not connect to the database. Please check your DATABASE_URL in .env.local',
     };
   }
 }
 
 // Export the pool for direct use if needed
 export { pool };
-

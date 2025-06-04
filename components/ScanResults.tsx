@@ -24,8 +24,12 @@ export default function ScanResults({ searchQuery = '' }: ScanResultsProps) {
         }
 
         setScans(data);
-      } catch (err: any) {
-        setError(err.message || 'An error occurred while fetching scans');
+      } catch (err: unknown) {
+        if (err instanceof Error) {
+          setError(err.message);
+        } else {
+          setError('An error occurred while fetching scans');
+        }
       } finally {
         setLoading(false);
       }
@@ -81,7 +85,7 @@ export default function ScanResults({ searchQuery = '' }: ScanResultsProps) {
           </span>
         </div>
         <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-4">
-          No results found for "{searchQuery}". Try a different search term.
+          No results found for '{searchQuery}'. Try a different search term.
         </div>
       </div>
     );

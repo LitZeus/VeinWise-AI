@@ -44,9 +44,18 @@ export function generateToken(user: User): string {
 }
 
 // Verify a JWT token
-export function verifyToken(token: string): any {
+interface DecodedToken {
+  id: string;
+  email: string;
+  name: string;
+  iat?: number;
+  exp?: number;
+}
+
+// Verify a JWT token
+export function verifyToken(token: string): DecodedToken | null {
   try {
-    const decoded = verify(token, JWT_SECRET);
+    const decoded = verify(token, JWT_SECRET) as DecodedToken;
     return decoded;
   } catch (error) {
     console.error('Token verification failed:', error);

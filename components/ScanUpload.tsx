@@ -50,30 +50,33 @@ export default function ScanUpload({ patientId, onUploadComplete }: ScanUploadPr
     }
   }, [patientId]);
 
-  const handleUploadSuccess = async (result: any) => {
+  const handleUploadSuccess = async (result: unknown) => {
     try {
       setLoading(true);
       setError(null);
       setProcessingStatus('Optimizing image for analysis...');
 
-      // Get the secure URL from the upload result
-      const imageUrl = result.info.secure_url;
+      const uploadResult = result as {
+        info: {
+          secure_url: string;
+        };
+      };
+
+      const imageUrl = uploadResult.info.secure_url;
       setUploadedImage(imageUrl);
 
-      // Simulate image processing with a delay
-      await new Promise(resolve => setTimeout(resolve, 800));
+      await new Promise((resolve) => setTimeout(resolve, 800));
       setProcessingStatus('Running vascular analysis...');
 
-      await new Promise(resolve => setTimeout(resolve, 1200));
+      await new Promise((resolve) => setTimeout(resolve, 1200));
       setProcessingStatus('Generating diagnostic predictions...');
 
-      // Call the prediction API
       const response = await fetch('/api/predict', {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ imageUrl, patientId }),
+        body: JSON.stringify({ imageUrl, patientId })
       });
 
       const data = await response.json();
@@ -82,15 +85,17 @@ export default function ScanUpload({ patientId, onUploadComplete }: ScanUploadPr
         throw new Error(data.message || 'Failed to process image');
       }
 
-      // Call the callback with the result
       onUploadComplete({
         imageUrl,
         predictionLabel: data.label,
-        confidence: data.confidence,
+        confidence: data.confidence
       });
-
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during processing');
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError('An error occurred during processing');
+      }
     } finally {
       setLoading(false);
     }

@@ -60,11 +60,14 @@ export default function PatientForm({ onPatientCreated }: PatientFormProps) {
 
       // Call the callback with the new patient ID
       onPatientCreated(data.id);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
-    } finally {
-      setLoading(false);
+    } catch (err: unknown) {
+      if (err instanceof Error) {
+        setError(err.message || 'An error occurred');
+      } else {
+        setError('An unexpected error occurred');
+      }
     }
+
   };
 
   return (
