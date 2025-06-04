@@ -252,7 +252,7 @@ export default function PatientDetailPage({ params }: { params: { id: string } }
                   style={{ animationDelay: `${Math.min(index * 100, 500)}ms` }}
                 >
                   <div className="aspect-w-16 aspect-h-9 bg-gray-100 relative overflow-hidden">
-                    // eslint-disable-next-line @next/next/no-img-element
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
                       src={scan.image_url}
                       alt={`Scan for ${patient.name}`}
