@@ -1,10 +1,10 @@
 import { clearAuthCookie, destroyUserSession } from '@/lib/auth';
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 // Ensure this route is not cached
 export const dynamic = 'force-dynamic';
 
-export async function POST(_request: NextRequest) {
+export async function POST() {
   try {
 
     // Destroy the session

@@ -24,10 +24,7 @@ interface Scan {
   created_at: string;
 }
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: string } }
-  ): Promise<Response> {
+export default function PatientDetailPage({ params }: { params: { id: string } }) {
   // Get the patient ID from params
   const patientId = params.id;
 

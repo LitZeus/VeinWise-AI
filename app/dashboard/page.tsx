@@ -36,7 +36,7 @@ async function getStats() {
     const user = await getServerUser();
 
     // Force a cache refresh by adding a timestamp to ensure real-time data
-    const _timestamp = Date.now();
+    //const _timestamp = Date.now();
 
     // Get patient count for current user only
     const patientResult = await query(
