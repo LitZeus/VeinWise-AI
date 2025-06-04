@@ -113,7 +113,7 @@ export function LazyImage({
   
   return (
     <div className={`relative overflow-hidden ${className}`} style={{ width, height }}>
-      // eslint-disable-next-line @next/next/no-img-element
+      {/* eslint-disable-next-line @next/next/no-img-element */}
       <img
         src={imageSrc}
         alt={alt}
