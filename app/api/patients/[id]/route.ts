@@ -5,7 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 // GET a single patient by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get current user
@@ -18,8 +18,10 @@ export async function GET(
       );
     }
 
+    // Await params to get the ID
+    const { id: patientId } = await params;
+    
     // Get patient by ID (only if it belongs to the current user)
-    const patientId = params?.id;
     const result = await query(
       'SELECT * FROM patients WHERE id = $1 AND user_id = $2',
       [patientId, user.id]
@@ -45,7 +47,7 @@ export async function GET(
 // UPDATE a patient
 export async function PUT(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get current user
@@ -58,8 +60,10 @@ export async function PUT(
       );
     }
 
+    // Await params to get the ID
+    const { id: patientId } = await params;
+
     // Check if patient exists and belongs to the current user
-    const patientId = params?.id;
     const checkResult = await query(
       'SELECT id FROM patients WHERE id = $1 AND user_id = $2',
       [patientId, user.id]
@@ -104,7 +108,7 @@ export async function PUT(
 // DELETE a patient
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: { id: string } }
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
     // Get current user
@@ -117,8 +121,10 @@ export async function DELETE(
       );
     }
 
+    // Await params to get the ID
+    const { id: patientId } = await params;
+
     // Check if patient exists and belongs to the current user
-    const patientId = params?.id;
     const checkResult = await query(
       'SELECT id FROM patients WHERE id = $1 AND user_id = $2',
       [patientId, user.id]
