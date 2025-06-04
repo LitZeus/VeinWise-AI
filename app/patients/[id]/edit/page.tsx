@@ -1,8 +1,8 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { FaArrowLeft, FaSave, FaTrash } from 'react-icons/fa';
 
 interface Patient {
@@ -14,13 +14,14 @@ interface Patient {
   phone: string;
 }
 
-export default function EditPatientPage({ params }: { params: { id: string } }) {
+export default function EditPatientPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const [patient, setPatient] = useState<Patient | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [patientId, setPatientId] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     name: '',
     age: '',
@@ -35,10 +36,21 @@ export default function EditPatientPage({ params }: { params: { id: string } }) 
   });
 
   useEffect(() => {
+    const initializeParams = async () => {
+      const resolvedParams = await params;
+      setPatientId(resolvedParams.id);
+    };
+    
+    initializeParams();
+  }, [params]);
+
+  useEffect(() => {
+    if (!patientId) return;
+    
     const fetchPatient = async () => {
       try {
         setIsLoading(true);
-        const response = await fetch(`/api/patients/${params.id}`);
+        const response = await fetch(`/api/patients/${patientId}`);
         
         if (!response.ok) {
           throw new Error('Failed to fetch patient');
@@ -61,7 +73,7 @@ export default function EditPatientPage({ params }: { params: { id: string } }) 
     };
     
     fetchPatient();
-  }, [params.id]);
+  }, [patientId]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -106,13 +118,13 @@ export default function EditPatientPage({ params }: { params: { id: string } }) 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!validateForm()) {
+    if (!validateForm() || !patientId) {
       return;
     }
     
     try {
       setIsSaving(true);
-      const response = await fetch(`/api/patients/${params.id}`, {
+      const response = await fetch(`/api/patients/${patientId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -139,13 +151,13 @@ export default function EditPatientPage({ params }: { params: { id: string } }) 
   };
 
   const handleDelete = async () => {
-    if (!window.confirm('Are you sure you want to delete this patient? This action cannot be undone.')) {
+    if (!window.confirm('Are you sure you want to delete this patient? This action cannot be undone.') || !patientId) {
       return;
     }
     
     try {
       setIsDeleting(true);
-      const response = await fetch(`/api/patients/${params.id}`, {
+      const response = await fetch(`/api/patients/${patientId}`, {
         method: 'DELETE',
       });
       
