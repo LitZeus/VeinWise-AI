@@ -48,13 +48,13 @@ export default function UploadPage() {
 
       setSuccess('Scan uploaded and analyzed successfully!');
 
-      // Redirect to results page after a short delay
       setTimeout(() => {
         router.push('/results');
       }, 2000);
 
-    } catch (err: any) {
-      setError(err.message || 'An error occurred');
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : 'An error occurred';
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -178,7 +178,7 @@ export default function UploadPage() {
                     </div>
                     <div>
                       <h3 className="text-lg font-medium leading-6 text-gray-900">Upload Vascular Scan</h3>
-                      <p className="text-sm text-gray-500">Upload the patient's scan for AI-powered analysis</p>
+                      <p className="text-sm text-gray-500">Upload the patient&apos;s scan for AI-powered analysis</p>
                     </div>
                   </div>
 

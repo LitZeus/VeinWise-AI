@@ -46,89 +46,91 @@ export default function AuthForm({ type, redirectPath = '/dashboard' }: AuthForm
     }));
   };
 
-  const handleLoginSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+const handleLoginSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-    try {
-      const response = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(loginData),
-      });
+  try {
+    const response = await fetch('/api/auth/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(loginData),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (!response.ok) {
-        if (response.status === 503) {
-          throw new Error('Database connection error. Please check your database configuration.');
-        } else {
-          throw new Error(data.message || 'Login failed');
-        }
+    if (!response.ok) {
+      if (response.status === 503) {
+        throw new Error('Database connection error. Please check your database configuration.');
+      } else {
+        throw new Error(data.message || 'Login failed');
       }
-
-      // Add a small delay to ensure the cookie is set before redirecting
-      setTimeout(() => {
-        // Force a hard navigation to ensure the cookie is properly set
-        window.location.href = redirectPath;
-      }, 500);
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during login');
-    } finally {
-      setLoading(false);
     }
-  };
 
-  const handleRegisterSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
+    // Add a small delay to ensure the cookie is set before redirecting
+    setTimeout(() => {
+      window.location.href = redirectPath;
+    }, 500);
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setError(err.message || 'An error occurred during login');
+    } else {
+      setError('An unknown error occurred during login');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
-    // Step 1: Validate email and password
-    if (registrationStep === 1) {
-      // Validate passwords match
-      if (registerData.password !== registerData.confirmPassword) {
-        setError('Passwords do not match');
-        return;
-      }
+const handleRegisterSubmit = async (e: React.FormEvent) => {
+  e.preventDefault();
 
-      // Move to step 2
-      setRegistrationStep(2);
+  if (registrationStep === 1) {
+    if (registerData.password !== registerData.confirmPassword) {
+      setError('Passwords do not match');
       return;
     }
 
-    // Step 2: Submit the full registration data
-    setLoading(true);
-    setError(null);
+    setRegistrationStep(2);
+    return;
+  }
 
-    try {
-      const response = await fetch('/api/auth/register', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(registerData),
-      });
+  setLoading(true);
+  setError(null);
 
-      const data = await response.json();
+  try {
+    const response = await fetch('/api/auth/register', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(registerData),
+    });
 
-      if (!response.ok) {
-        if (response.status === 503) {
-          throw new Error('Database connection error. Please check your database configuration.');
-        } else {
-          throw new Error(data.message || 'Registration failed');
-        }
+    const data = await response.json();
+
+    if (!response.ok) {
+      if (response.status === 503) {
+        throw new Error('Database connection error. Please check your database configuration.');
+      } else {
+        throw new Error(data.message || 'Registration failed');
       }
-
-      // Redirect to login on successful registration
-      router.push('/login');
-    } catch (err: any) {
-      setError(err.message || 'An error occurred during registration');
-    } finally {
-      setLoading(false);
     }
-  };
+
+    router.push('/login');
+  } catch (err: unknown) {
+    if (err instanceof Error) {
+      setError(err.message || 'An error occurred during registration');
+    } else {
+      setError('An unknown error occurred during registration');
+    }
+  } finally {
+    setLoading(false);
+  }
+};
 
   const handleBackToStep1 = () => {
     setRegistrationStep(1);
@@ -203,7 +205,7 @@ export default function AuthForm({ type, redirectPath = '/dashboard' }: AuthForm
 
           <div className="text-center">
             <p className="text-sm text-gray-600">
-              Don't have an account?{' '}
+              Don&apos;t have an account?{' '}
               <Link href="/register" className="text-blue-600 hover:text-blue-800 font-medium">
                 Sign up
               </Link>

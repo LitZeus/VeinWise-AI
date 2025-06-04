@@ -85,7 +85,7 @@ export default function ScanResults({ searchQuery = '' }: ScanResultsProps) {
           </span>
         </div>
         <div className="bg-blue-50 border border-blue-200 text-blue-700 px-4 py-3 rounded mb-4">
-          No results found for '{searchQuery}'. Try a different search term.
+          No results found for &apos;{searchQuery}&apos;. Try a different search term.
         </div>
       </div>
     );
