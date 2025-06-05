@@ -1,4 +1,4 @@
-# Medical Scan Management Web App
+# VeinWise AI
 
 A full-stack Next.js application for doctors to manage patient scans and view varicose vein prediction results.
 
