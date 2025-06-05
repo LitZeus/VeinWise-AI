@@ -129,4 +129,5 @@ This application can be deployed to platforms like Vercel:
 
 ## License
 
-[MIT](LICENSE)
+This project is **not licensed for reuse**.  
+You may **view** the source code and suggest changes (via PRs or issues), but **you may not copy, distribute, or use it** for any other purpose without permission.
