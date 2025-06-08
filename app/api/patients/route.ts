@@ -93,19 +93,23 @@ export async function POST(request: NextRequest) {
         { status: 201 }
       );
     } catch (error: unknown) {
-      // Type guard for error
-      if (error && typeof error === 'object' && 'code' in error) {
-      // Unique constraint violation for phone/email
-        // @ts-ignore
-        if (error.code === '23505') {
-        let conflictField = 'phone/email';
-        if (error.detail && error.detail.includes('phone')) conflictField = 'phone';
-        if (error.detail && error.detail.includes('email')) conflictField = 'email';
-        return NextResponse.json(
-          { message: `A patient with this ${conflictField} already exists.` },
-          { status: 409 }
-        );
-      }
+      if (
+        typeof error === "object" &&
+        error !== null &&
+        "code" in error &&
+        typeof (error as any).code === "string"
+      ) {
+        let conflictField = "phone/email";
+        if ("detail" in error && typeof (error as any).detail === "string") {
+          if ((error as any).detail.includes("phone")) conflictField = "phone";
+          if ((error as any).detail.includes("email")) conflictField = "email";
+        }
+        if ((error as any).code === "23505") {
+          return NextResponse.json(
+            { message: `A patient with this ${conflictField} already exists.` },
+            { status: 409 }
+          );
+        }
       }
       throw error;
     }
