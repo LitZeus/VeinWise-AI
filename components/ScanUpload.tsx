@@ -7,7 +7,7 @@ import { FaCalendarAlt, FaCloudUploadAlt, FaImage, FaSpinner, FaUser, FaVenusMar
 
 interface ScanUploadProps {
   patientId: string;
-  onUploadComplete: (result: { imageUrl: string; predictionLabel: string; confidence: number }) => void;
+  onUploadComplete: (outcome: { success: boolean; message?: string; scanId?: string }) => void;
 }
 
 interface PatientInfo {
@@ -82,13 +82,23 @@ export default function ScanUpload({ patientId, onUploadComplete }: ScanUploadPr
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.message || 'Failed to process image');
+        // If /api/predict fails, call onUploadComplete with success: false
+        onUploadComplete({
+          success: false,
+          message: data.message || 'Failed to process image via /api/predict'
+        });
+        // It's often good practice to not proceed further if the core API call failed.
+        // Depending on desired UX, you might throw new Error(data.message || 'Failed to process image');
+        return; // Exit if /api/predict failed
       }
 
+      // If /api/predict is successful, call onUploadComplete with success: true
+      // and pass relevant data from the /api/predict response.
       onUploadComplete({
-        imageUrl,
-        predictionLabel: data.label,
-        confidence: data.confidence
+        success: true,
+        message: data.message || 'Scan processed successfully!', // Use message from /api/predict if available
+        scanId: data.scanId, // Assuming your /api/predict response includes scanId
+        // Add other fields from 'data' if handleUploadComplete in page.tsx needs them for UI updates
       });
     } catch (err: unknown) {
       if (err instanceof Error) {

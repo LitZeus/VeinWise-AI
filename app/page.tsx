@@ -44,7 +44,7 @@ export default function Home() {
             </div>
 
             <h2 className="text-3xl sm:text-4xl lg:text-5xl font-bold text-white mb-4">
-              Medical Scan Management
+              Varicose Veins Scan Management
             </h2>
             <p className="max-w-2xl text-indigo-100 text-lg opacity-90 leading-relaxed mb-8">
               A comprehensive platform for doctors to manage patient scans and view varicose vein prediction results with clinical precision.

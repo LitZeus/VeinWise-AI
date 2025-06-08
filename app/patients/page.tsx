@@ -125,15 +125,6 @@ export default function PatientsPage() {
   return (
     <div className="min-h-screen bg-slate-100 p-4 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header with branding */}
-        <div className="mb-6 flex items-center">
-          <div className="bg-indigo-900 p-2 rounded-lg mr-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">VeinWise</h1>
-        </div>
 
         {/* Main content area */}
         <div className="bg-white shadow-lg rounded-xl overflow-hidden">
@@ -152,7 +143,7 @@ export default function PatientsPage() {
                   </svg>
                 </div>
                 <div>
-                  <h2 className="text-base sm:text-lg font-medium sm:font-semibold text-gray-900">Patient Management</h2>
+                <h2 className="text-base sm:text-lg font-medium sm:font-semibold text-white-900">Patient Management</h2>
                   <p className="text-indigo-100 opacity-90 text-xs sm:text-sm hidden sm:block">
                     View, filter, and manage your patients
                   </p>
@@ -162,7 +153,7 @@ export default function PatientsPage() {
                 href="/patients/add"
                 className="inline-flex items-center px-3 sm:px-4 py-1.5 sm:py-2 border border-transparent text-xs sm:text-sm font-medium rounded-md shadow-sm text-indigo-900 bg-white hover:bg-indigo-50 transition-all duration-300 hover:shadow-lg"
               >
-                <FaUserPlus className="mr-1 sm:mr-2" /> <span className="hidden sm:inline">Add New</span> Patient
+                <FaUserPlus className="mr-1 sm:mr-2" /> <span className="hidden sm:inline">New Patient</span>
               </Link>
             </div>
           </div>

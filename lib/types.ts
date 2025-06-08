@@ -27,6 +27,8 @@ export interface PatientFormData {
   name: string;
   age: number;
   gender: 'Male' | 'Female' | 'Other';
+  phone: string;
+  email: string;
 }
 
 // Scan types

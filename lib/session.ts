@@ -24,7 +24,6 @@ export const sessionOptions: SessionOptions = {
   },
 };
 
-// Get session from request
 export async function getSession() {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
@@ -39,7 +38,6 @@ export async function getSession() {
   return session;
 }
 
-// Create a new session
 export async function createSession(userData: {
   id: string;
   email: string;
@@ -64,14 +62,12 @@ export async function createSession(userData: {
   return session;
 }
 
-// Destroy session (logout)
 export async function destroySession() {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);
   await session.destroy();
 }
 
-// Extend session (refresh)
 export async function extendSession() {
   const cookieStore = await cookies();
   const session = await getIronSession<SessionData>(cookieStore, sessionOptions);

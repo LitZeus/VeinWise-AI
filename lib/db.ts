@@ -6,7 +6,6 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false }, // Required for Neon PostgreSQL
 });
 
-// Helper function to execute SQL queries
 export async function query(text: string, params?: unknown[]) {
   try {
     const res = await pool.query(text, params);

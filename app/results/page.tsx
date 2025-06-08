@@ -10,16 +10,6 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-slate-100 p-0 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header with branding */}
-        <div className="mb-6 flex items-center px-4 sm:px-0">
-          <div className="bg-indigo-900 p-2 rounded-lg mr-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">VeinWise</h1>
-        </div>
-
         {/* Main content area */}
         <div className="bg-white shadow-lg rounded-xl overflow-hidden">
           {/* Page header */}

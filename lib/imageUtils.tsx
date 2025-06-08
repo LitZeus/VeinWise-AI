@@ -65,13 +65,11 @@ export async function compressImage(file: File, maxWidth = 1200, quality = 0.8):
   });
 }
 
-// Custom hook for lazy loading images
 export function useLazyImage(src: string, placeholder = '/images/placeholder.jpg') {
   const [imageSrc, setImageSrc] = useState(placeholder);
   const [imageLoaded, setImageLoaded] = useState(false);
   
   useEffect(() => {
-    // Reset state when src changes
     setImageLoaded(false);
     setImageSrc(placeholder);
     

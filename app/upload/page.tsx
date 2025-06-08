@@ -21,57 +21,34 @@ export default function UploadPage() {
     setStep('scan');
   };
 
-  const handleUploadComplete = async (result: { imageUrl: string; predictionLabel: string; confidence: number }) => {
-    try {
-      setLoading(true);
-      setError(null);
-
-      // Save the scan result to the database
-      const response = await fetch('/api/scans', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          patient_id: patientId,
-          image_url: result.imageUrl,
-          prediction_label: result.predictionLabel,
-          confidence: result.confidence,
-        }),
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || 'Failed to save scan result');
+  const handleUploadComplete = (
+    apiPredictOutcome: {
+      success: boolean;
+      message?: string;
+      scanId?: string;
+    }
+  ) => {
+    setLoading(false);
+    if (apiPredictOutcome.success) {
+      setSuccess(apiPredictOutcome.message || 'Scan uploaded and analyzed successfully!');
+      console.log('Scan processing successful. Scan ID from /api/predict:', apiPredictOutcome.scanId);
+      // Redirect to the patient's results page after a short delay
+      if (patientId) {
+        setTimeout(() => {
+          router.push(`/patients/${patientId}`);
+        }, 1500); // 1.5s delay to let user see the success message
       }
-
-      setSuccess('Scan uploaded and analyzed successfully!');
-
+    } else {
+      setError(apiPredictOutcome.message || 'An error occurred during the prediction process.');
       setTimeout(() => {
-        router.push('/results');
-      }, 2000);
-
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : 'An error occurred';
-      setError(message);
-    } finally {
-      setLoading(false);
+        setError(null);
+      }, 5000);
     }
   };
 
   return (
     <div className="min-h-screen bg-slate-100 p-0 sm:p-6 md:p-8">
       <div className="max-w-6xl mx-auto">
-        {/* Header with branding */}
-        <div className="mb-6 flex items-center px-4 sm:px-0">
-          <div className="bg-indigo-900 p-2 rounded-lg mr-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M22 12h-4l-3 9L9 3l-3 9H2" />
-            </svg>
-          </div>
-          <h1 className="text-2xl font-bold text-gray-900">VeinWise</h1>
-        </div>
 
         {/* Main content area */}
         <div className="bg-white shadow-lg rounded-xl overflow-hidden">

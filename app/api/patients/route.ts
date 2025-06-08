@@ -72,26 +72,39 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { name, age, gender } = await request.json();
+    const { name, age, gender, phone, email } = await request.json();
 
     // Validate input
-    if (!name || !age || !gender) {
+    if (!name || !age || !gender || !phone || !email) {
       return NextResponse.json(
         { message: 'All fields are required' },
         { status: 400 }
       );
     }
 
-    // Insert new patient
-    const result = await query(
-      'INSERT INTO patients (user_id, name, age, gender) VALUES ($1, $2, $3, $4) RETURNING id',
-      [user.id, name, age, gender]
-    );
-
-    return NextResponse.json(
-      { message: 'Patient created successfully', id: result.rows[0].id },
-      { status: 201 }
-    );
+    try {
+      // Insert new patient
+      const result = await query(
+        'INSERT INTO patients (user_id, name, age, gender, phone, email) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id',
+        [user.id, name, age, gender, phone, email]
+      );
+      return NextResponse.json(
+        { message: 'Patient created successfully', id: result.rows[0].id },
+        { status: 201 }
+      );
+    } catch (error: any) {
+      // Unique constraint violation for phone/email
+      if (error.code === '23505') {
+        let conflictField = 'phone/email';
+        if (error.detail && error.detail.includes('phone')) conflictField = 'phone';
+        if (error.detail && error.detail.includes('email')) conflictField = 'email';
+        return NextResponse.json(
+          { message: `A patient with this ${conflictField} already exists.` },
+          { status: 409 }
+        );
+      }
+      throw error;
+    }
   } catch (error) {
     console.error('Error creating patient:', error);
     return NextResponse.json(
