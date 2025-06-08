@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import Link from "next/link";
+import Image from "next/image";
 
 interface Scan {
   id: string;
@@ -35,7 +36,7 @@ export default function ScanDetailPage() {
         const scanDataArr = await scanRes.json();
         let scanData = null;
         if (Array.isArray(scanDataArr)) {
-          scanData = scanDataArr.find((s:any) => s.id === scanId);
+          scanData = scanDataArr.find((s: Scan) => s.id === scanId);
         } else {
           scanData = scanDataArr;
         }
@@ -76,9 +77,13 @@ export default function ScanDetailPage() {
     <div className="max-w-2xl mx-auto mt-16 p-6 bg-white shadow rounded-xl animate-fadeIn">
       <h1 className="text-2xl font-bold mb-4 text-gray-900">Scan Result Details</h1>
       <div className="mb-6">
-        <img
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        {/* Replace <img> with Next.js <Image /> for optimization */}
+        <Image
           src={scan.image_url}
           alt="Scan"
+          width={800}
+          height={256}
           className="w-full h-64 object-contain rounded-lg border"
         />
       </div>

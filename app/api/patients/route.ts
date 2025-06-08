@@ -92,9 +92,12 @@ export async function POST(request: NextRequest) {
         { message: 'Patient created successfully', id: result.rows[0].id },
         { status: 201 }
       );
-    } catch (error: any) {
+    } catch (error: unknown) {
+      // Type guard for error
+      if (error && typeof error === 'object' && 'code' in error) {
       // Unique constraint violation for phone/email
-      if (error.code === '23505') {
+        // @ts-ignore
+        if (error.code === '23505') {
         let conflictField = 'phone/email';
         if (error.detail && error.detail.includes('phone')) conflictField = 'phone';
         if (error.detail && error.detail.includes('email')) conflictField = 'email';
@@ -102,6 +105,7 @@ export async function POST(request: NextRequest) {
           { message: `A patient with this ${conflictField} already exists.` },
           { status: 409 }
         );
+      }
       }
       throw error;
     }

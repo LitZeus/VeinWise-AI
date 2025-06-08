@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import axios from 'axios';
-import { getCurrentUser, verifyToken } from '@/lib/auth';
+import { getCurrentUser } from '@/lib/auth';
 
 interface PredictionRequest {
   imageUrl: string;
@@ -26,8 +26,7 @@ interface ScanData {
   doctor_id: string;
 }
 
-const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
-const ALLOWED_TYPES = ['image/jpeg', 'image/jpg', 'image/png', 'image/webp'];
+
 
 // Error types
 interface ApiError extends Error {

@@ -98,8 +98,7 @@ export async function POST(request: NextRequest) {
     // Parse and validate request body
     const body = await request.json();
     console.log('Received raw scan data:', body);
-    let scanData;
-    scanData = scanSchema.parse(body);
+    const scanData = scanSchema.parse(body);
     console.log('Validated scan data:', scanData);
 
     // Insert new scan
