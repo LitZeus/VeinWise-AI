@@ -77,7 +77,6 @@ export default function ScanDetailPage() {
     <div className="max-w-2xl mx-auto mt-16 p-6 bg-white shadow rounded-xl animate-fadeIn">
       <h1 className="text-2xl font-bold mb-4 text-gray-900">Scan Result Details</h1>
       <div className="mb-6">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
         {/* Replace <img> with Next.js <Image /> for optimization */}
         <Image
           src={scan.image_url}

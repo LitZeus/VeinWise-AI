@@ -1,3 +1,4 @@
+/* eslint-disable {"@typescript-eslint/no-explicit-any": "off"} */
 import { getCurrentUser } from '@/lib/auth';
 import { checkDatabaseConnection, query } from '@/lib/db';
 import { NextRequest, NextResponse } from 'next/server';
